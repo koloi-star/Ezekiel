@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matamang Guest House | Home</title>
+  <style>
+    body {font-family: "Poppins", sans-serif; margin:0; background:#f7f8fa; color:#222;}
+    header {background:#0d2030; color:white; padding:15px 20px;}
+    nav {display:flex; justify-content:space-between; align-items:center;}
+    nav ul {list-style:none; display:flex; gap:20px;}
+    nav a {color:white; text-decoration:none;}
+    nav a.active{text-decoration:underline;}
+    .banner {background:url('hotel-banner.JPEG') center/cover no-repeat; color:white; text-align:center; padding:100px 20px;}
+    .stats {display:flex; justify-content:space-around; margin:20px auto; max-width:900px;}
+    .card {background:white; border-radius:10px; padding:20px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+    .booking, .bookings {margin:30px auto; max-width:900px; background:white; border-radius:10px; padding:20px; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+    form input, form select, form button {display:block; width:100%; margin:10px 0; padding:10px; border-radius:5px; border:1px solid #ccc;}
+    button {background:#0d2030; color:white; border:none; cursor:pointer;}
+    button:hover {background:#12324c;}
+    table {width:100%; border-collapse:collapse; margin-top:10px;}
+    th, td {padding:8px; border-bottom:1px solid #ddd; text-align:center;}
+    footer {text-align:center; background:#0d2030; color:white; padding:10px; margin-top:40px;}
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>Matamang Guest House</h1>
+      <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="About.html">About us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    </nav>
+  </header>
+
+  <section class="banner">
+    <h2>Welcome to Matamang Guest House</h2>
+    <p>Experience comfort, peace, and hospitality at its best.</p>
+  </section>
+
+  <section class="stats">
+    <div class="card"><h3>Available Rooms</h3><p id="roomsCount">6</p></div>
+    <div class="card"><h3>Booked Rooms</h3><p id="bookingsCount">0</p></div>
+    <div class="card"><h3>Waitlist</h3><p id="waitlistCount">0</p></div>
+  </section>
+
+  <section class="booking">
+    <h2>Book a Room</h2>
+    <form id="bookingForm">
+      <input type="text" id="guestName" placeholder="Guest Name" required />
+      <input type="number" id="roomNumber" placeholder="Room #" required />
+      <input type="date" id="checkIn" required />
+      <input type="date" id="checkOut" required />
+      <select id="status">
+        <option value="confirmed">Confirmed</option>
+        <option value="waitlist">Waitlist</option>
+      </select>
+      <button type="submit">Add Booking</button>
+    </form>
+  </section>
+
+  <section class="bookings">
+    <h2>Upcoming Bookings</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Guest</th>
+          <th>Room</th>
+          <th>Check-in</th>
+          <th>Check-out</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="bookingTable"></tbody>
+    </table>
+  </section>
+
+  <footer>
+    <p>📞 +266 5975 9371 | ✉️ matamangguesthouse@gmail.com</p>
+    <p>© 2025 Matamang Guest House | All rights reserved.</p>
+  </footer>
+
+  <script>
+    let totalRooms = 6;
+    let bookings = [];
+    let waitlist = [];
+
+    const roomsCount = document.getElementById("roomsCount");
+    const bookingsCount = document.getElementById("bookingsCount");
+    const waitlistCount = document.getElementById("waitlistCount");
+    const tableBody = document.getElementById("bookingTable");
+
+    function updateStats() {
+      roomsCount.textContent = totalRooms - bookings.length;
+      bookingsCount.textContent = bookings.length;
+      waitlistCount.textContent = waitlist.length;
+    }
+
+    document.getElementById("bookingForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      // Prevent booking if all rooms are full
+      if (bookings.length >= totalRooms) {
+        alert("All rooms are fully booked! You cannot add more bookings.");
+        return;
+      }
+
+      const guest = document.getElementById("guestName").value;
+      const room = parseInt(document.getElementById("roomNumber").value);
+      const checkIn = document.getElementById("checkIn").value;
+      const checkOut = document.getElementById("checkOut").value;
+      const status = document.getElementById("status").value;
+
+      if (status === "confirmed") {
+        if (bookings.some((b) => b.room === room)) {
+          alert("Room already booked! Added to waitlist instead.");
+          waitlist.push({ guest, room, checkIn, checkOut, status: "waitlist" });
+        } else {
+          bookings.push({ guest, room, checkIn, checkOut, status });
+        }
+      } else {
+        waitlist.push({ guest, room, checkIn, checkOut, status });
+      }
+
+      document.getElementById("bookingForm").reset();
+      renderBookings();
+      updateStats();
+    });
+
+    function renderBookings() {
+      tableBody.innerHTML = "";
+      bookings.forEach((b, i) => {
+        const row = `<tr>
+          <td>${b.guest}</td>
+          <td>${b.room}</td>
+          <td>${b.checkIn}</td>
+          <td>${b.checkOut}</td>
+          <td>${b.status}</td>
+          <td><button onclick="cancelBooking(${i})">Cancel</button></td>
+        </tr>`;
+        tableBody.innerHTML += row;
+      });
+    }
+
+    function cancelBooking(index) {
+      const cancelled = bookings.splice(index, 1)[0];
+      alert(`${cancelled.guest}'s booking cancelled.`);
+      updateStats();
+      renderBookings();
+
+      if (waitlist.length > 0) {
+        const next = waitlist.shift();
+        bookings.push({ ...next, status: "confirmed" });
+        alert(`Waitlisted guest ${next.guest} has been booked into room ${next.room}.`);
+        updateStats();
+        renderBookings();
+      }
+    }
+
+    updateStats();
+  </script>
+</body>
+</html>

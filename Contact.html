@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matamong Guest House | Contact</title>
+<style>
+  body {font-family:Poppins,sans-serif; background:#f7f8fa; margin:0;}
+  header {background:#0d2030; color:white; padding:15px 20px;}
+  nav {display:flex; justify-content:space-between; align-items:center;}
+  nav ul {list-style:none; display:flex; gap:20px;}
+  nav a {color:white; text-decoration:none;}
+  nav a.active{text-decoration:underline;}
+  .contact {max-width:900px; margin:40px auto; background:white; padding:20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+  .contact-form input, .contact-form textarea, .contact-form button {width:100%; margin:10px 0; padding:10px; border-radius:5px; border:1px solid #ccc;}
+  button {background:#0d2030; color:white; border:none; cursor:pointer;}
+  button:hover{background:#12324c;}
+  footer {text-align:center; background:#0d2030; color:white; padding:10px; margin-top:40px;}
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <h1>Matamong Guest House</h1>
+    <<ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="About.html">About us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="contact">
+  <h2>Contact Us</h2>
+  <p>📍 Ha Thetsane, Maseru, Lesotho</p>
+  <p>📞 +266 5975 9371 / +266 6280 4034</p>
+  <p>✉️ <a href="mailto:matamongguesthouse@gmail.com">matamongguesthouse@gmail.com</a></p>
+
+  <form class="contact-form">
+    <input type="text" placeholder="Your Name" required>
+    <input type="email" placeholder="Your Email" required>
+    <textarea rows="4" placeholder="Your Message" required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+</section>
+
+<footer>
+  <p><a href="index.html">Home</a> | <a href="services.html">Services</a></p>
+  <p>© 2025 Matamong Guest House | All rights reserved.</p>
+</footer>
+
+<script>
+  document.querySelector(".contact-form").addEventListener("submit", function(e){
+    e.preventDefault();
+    alert("Thank you! Your message has been sent successfully.");
+    this.reset();
+  });
+</script>
+</body>
+</html>
